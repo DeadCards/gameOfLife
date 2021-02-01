@@ -51,15 +51,19 @@ void free_grid(grid_t *g)
 
 int count_neighbors(grid_t *g, int x, int y)
 {
-	return g->grid[y - 1][x - 1] + g->grid[y - 1][x] + g->grid[y - 1][x + 1] + g->grid[y][x - 1] + g->grid[y][x + 1] + g->grid[y + 1][x - 1] + g->grid[y + 1][x] + g->grid[y + 1][x + 1];
+	int top = ((y-1) < 0 ? g->hight - 1 : y - 1);
+	int bottom = ((y+1) > (g->hight-1) ? 0 : y + 1);
+	int left = ((x-1) < 0 ? g->width -1 : x - 1);
+	int right = ((x+1) > (g->width-1) ? 0 : x + 1);
+	return g->grid[top][left] + g->grid[top][x] + g->grid[top][right] + g->grid[y][left] + g->grid[y][right] + g->grid[bottom][left] + g->grid[bottom][x] + g->grid[bottom][right];
 }
 
 grid_t *evolve_grid(grid_t *g)
 {
 	grid_t *newg = make_grid(g->width, g->hight);
-	for (int i = 1; i < g->hight - 1; i++)
+	for (int i = 0; i < g->hight; i++)
 	{
-		for (int j = 1; j < g->width - 1; j++)
+		for (int j = 0; j < g->width; j++)
 		{
 			switch (count_neighbors(g, j, i))
 			{
